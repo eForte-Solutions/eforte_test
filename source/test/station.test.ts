@@ -3,7 +3,7 @@ import chaifs from 'chai-fs';
 import { expect } from 'chai';
 // import fetch from 'node-fetch';
 // import verifyToken from '../source/services/verifyToken';
-import { createStation, getWeatherAndStationData, getWeatherAndStationDataByKioskId } from '../controllers/station';
+import { generateStation, getStationAndWeatherData, getStationAndWeatherDataByKioskId } from '../controllers/station';
 
 chai.use(require('chai-fs'));
 chai.use(chaifs);
@@ -12,7 +12,7 @@ chai.use(chaifs);
 describe('station insertion unit test case', async () => {
     it('should return error from user station', function (done) {
         let Obj = {};
-        createStation(Obj)
+        generateStation(Obj)
             .then((res: any) => {
                 // never called
             })
@@ -24,7 +24,7 @@ describe('station insertion unit test case', async () => {
     });
     it('should return user from station save', function (done) {
         let Obj = {};
-        createStation(Obj)
+        generateStation(Obj)
             .then((res: any) => {
                 expect(res).to.be.not.equal(undefined);
                 expect(res).to.be.not.equal(null);

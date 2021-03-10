@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "server": "npx nodemon source/server.ts",
-    "start": "npx nodemon build/source/server.js",
+    "start": "npx nodemon dist/source/server.js",
     "test": "mocha source/test/station.test.ts"
   },
   "author": "",
@@ -19,6 +19,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "helmet": "^4.4.1",
     "jest": "^26.6.3",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^8.3.0",

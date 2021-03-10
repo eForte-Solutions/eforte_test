@@ -6,13 +6,13 @@ import { verify } from 'jsonwebtoken';
 import config from '../config/config';
 
 /**
- * verifyToken - Verify user token from header.
+ * authenticateToken - Verify user token from header.
  * @param req - request from parameters
  * @param res - response of the API
  * @param next - proceed to the next function
  * @returns {Promise<void>}
  */
-const verifyToken = async function (req: Request, res: Response, next: NextFunction) {
+const authenticateToken = async function (req: Request, res: Response, next: NextFunction) {
     console.log('Request headers: req.headers.authorization', req.headers.authorization);
     let token = req.headers.authorization;
     if (!token)
@@ -41,4 +41,4 @@ const verifyToken = async function (req: Request, res: Response, next: NextFunct
     }
 };
 
-export default verifyToken;
+export default authenticateToken;

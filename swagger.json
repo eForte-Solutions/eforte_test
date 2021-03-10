@@ -13,25 +13,25 @@
     ],
     "tags": [
         {
-            "name": "createStation",
+            "name": "generateStation",
             "description": "Store data from Indego"
         },
         {
-            "name": "getWeatherAndStationData",
+            "name": "getStationAndWeatherData",
             "description": "Snapshot of all stations at a specified time"
         },
         {
-            "name": "getWeatherAndStationDataByKioskId",
+            "name": "getStationAndWeatherDataByKioskId",
             "description": "Snapshot of one station at a specific time"
         }
     ],
 
 
     "paths": {
-        "/createStation": {
+        "/generateStation": {
             "post": {
                 "tags": [
-                    "createStation"
+                    "generateStation"
                 ],
                 "summary": "downloads fresh data from Indego GeoJSON station status API and stores it inside MongoDB.",
                 "requestBody": {
@@ -58,10 +58,10 @@
             }
         },
 
-        "/getWeatherAndStationData": {
+        "/getStationAndWeatherData": {
             "get": {
                 "tags": [
-                    "getWeatherAndStationData"
+                    "getStationAndWeatherData"
                 ],
                 "summary": "Open Weather Map for all stations at specified time",
                 "requestBody": {
@@ -88,10 +88,10 @@
             }
         },
 
-        "/getWeatherAndStationDataByKioskId": {
+        "/getStationAndWeatherDataByKioskId": {
             "get": {
                 "tags": [
-                    "getWeatherAndStationDataByKioskId"
+                    "getStationAndWeatherDataByKioskId"
                 ],
                 "summary": "Open Weather Map for all stations at specified time",
                 "requestBody": {

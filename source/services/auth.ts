@@ -1,44 +1,39 @@
 /**
  * Helper function to verify token
  */
-import { NextFunction, Request, Response } from 'express';
-import { verify } from 'jsonwebtoken';
-import config from '../config/config';
-
-/**
- * authenticateToken - Verify user token from header.
- * @param req - request from parameters
- * @param res - response of the API
- * @param next - proceed to the next function
- * @returns {Promise<void>}
- */
-const authenticateToken = async function (req: Request, res: Response, next: NextFunction) {
-    console.log('Request headers: req.headers.authorization', req.headers.authorization);
-    let token = req.headers.authorization;
-    if (!token)
-        return res.status(401).send({
-            status: 401,
-            data: null,
-            error: 'Not Authorized'
-        });
-    try {
-        let verified: any = verify(token, config.auth.SECRET_KEY);
-        if (verified._id == config.auth.ID) {
-            next();
-        } else {
-            return res.status(401).send({
-                status: 401,
-                data: null,
-                error: 'Not Authorized'
-            });
-        }
-    } catch (error) {
-        return res.status(400).send({
-            status: 400,
-            data: null,
-            error: 'Bad Request'
-        });
-    }
-};
-
-export default authenticateToken;
+ import { NextFunction, Request, Response } from 'express';
+ import { verify } from 'jsonwebtoken';
+ import config from '../config/config';
+ 
+ /**
+  * authenticateToken - Verify user token from header.
+  * @param token - request from parameters
+  * @returns {Promise<void>}
+  */
+ const authenticateToken = function (token: any) {
+     try {
+         let verified: any = verify(token, config.auth.SECRET_KEY);
+         if (verified._id == config.auth.ID) {
+             return {
+                 status: 200,
+                 data: verified,
+                 error: null
+             };
+         } else {
+             return {
+                 status: 401,
+                 data: null,
+                 error: 'Unauthorized'
+             };
+         }
+     } catch (error) {
+         return {
+             status: 400,
+             data: null,
+             error: 'Bad Request'
+         };
+     }
+ };
+ 
+ export default authenticateToken;
+ 

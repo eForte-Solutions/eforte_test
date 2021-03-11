@@ -4,10 +4,10 @@
   "description": "",
   "main": "source/server.ts",
   "scripts": {
-    "build": "tsc",
+    "test": "mocha -r ts-node/register source/test/station.test.ts --timeout 20000",
     "server": "npx nodemon source/server.ts",
     "start": "npx nodemon dist/source/server.js",
-    "test": "mocha source/test/station.test.ts"
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",

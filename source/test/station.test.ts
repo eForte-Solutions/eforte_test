@@ -10,6 +10,10 @@ import fetch from 'node-fetch';
 chai.use(require('chai-fs'));
 chai.use(chaifs);
 
+// Env Variables
+const authToken = `${process.env.STATIC_JWT}`;
+const serverHostName = process.env.SERVER_HOSTNAME || 'localhost';
+
 describe('station insertion unit test case', async () => {
     it('should return error from station save', function (done) {
         let error = true;
@@ -34,8 +38,8 @@ describe('station insertion unit test case', async () => {
                 feature: [],
                 type: 'string'
             },
-            createdAt: '2021-03-06 21:00:06.685Z',
-            updatedAt: '2021-03-06 21:00:06.685Z'
+            createdAt: '2021-03-11T12:52:04.859Z',
+            updatedAt: '2021-03-11T12:52:04.859Z'
         };
         const isSaveMethodCalled = sinon.stub(Station.prototype, 'save').yields(error, newObj);
         generateStation(newObj)
@@ -57,7 +61,7 @@ describe('station insertion unit test case', async () => {
 
 describe('Issue jwt token by user id unit test case', async () => {
     it('should return success from verify jwt token check', async function (done) {
-        let token: string = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWJiOWVhZjU3YmRiNjAwMTA5NjEzNjYiLCJpYXQiOjE2MTQ4ODA0MTl9.D3EVqPxWoL3BN6sAqRmMGhbJj1oPDzpYHESUqpSeBHo';
+        let token: string = authToken;
         let result: any = authenticateToken(token);
         if (result.status == 200) {
             expect(result).to.be.not.equal(undefined);
@@ -70,7 +74,7 @@ describe('Issue jwt token by user id unit test case', async () => {
     });
 
     it('should return unauthrorized from verify jwt token check failed unit', async function (done) {
-        let token: string = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWJiOWVhZjU3YmRiNjAwMTA5NjEzNjciLCJpYXQiOjE2MTQ4ODA3NDd9.xAHCJT-G5dmY4BObm-6kHdcxZq3xUjjMnkrW_iT0yFE';
+        let token: string = authToken;
         let result: any = authenticateToken(token);
         if (result.status == 200) {
             // never called
@@ -102,7 +106,7 @@ describe('Issue jwt token by user id unit test case', async () => {
 
 describe('station get unit test case by date', async () => {
     it('should return error on getting station from database', async function (done) {
-        let at = '2021-03-06 21:00:06.685Z';
+        let at = '2021-03-11T12:52:04.859Z';
         getStationAndWeatherData(at)
             .then((res: any) => {
                 // never called
@@ -114,7 +118,7 @@ describe('station get unit test case by date', async () => {
         done();
     });
     it('should return station object on getting station from database', async function (done) {
-        let at = '2021-03-06 21:00:06.685Z';
+        let at = '2021-03-11T12:52:04.859Z';
         getStationAndWeatherData(at)
             .then((res: any) => {
                 expect(res).to.be.not.equal(undefined);
@@ -130,9 +134,9 @@ describe('station get unit test case by date', async () => {
 
 describe('station get unit test case by date and Kiosk Id', async () => {
     it('should return error on getting station from database', function (done) {
-        let at = '2021-03-06 21:00:06.685Z';
+        let at = '2021-03-11T12:52:04.859Z';
         let id = '6043ed5623dab91c48889090';
-        getStationAndWeatherDataByKioskId(at, id)
+        getStationAndWeatherDataByKioskId(id, at)
             .then((res: any) => {
                 // never called
             })
@@ -143,9 +147,9 @@ describe('station get unit test case by date and Kiosk Id', async () => {
         done();
     });
     it('should return station object on getting station from database', function (done) {
-        let at = '2021-03-06 21:00:06.685Z';
+        let at = '2021-03-11T12:52:04.859Z';
         let id = '6043ed5623dab91c48889090';
-        getStationAndWeatherDataByKioskId(at, id)
+        getStationAndWeatherDataByKioskId(id, at)
             .then((res: any) => {
                 expect(res).to.be.not.equal(undefined);
                 expect(res).to.be.not.equal(null);
@@ -159,13 +163,13 @@ describe('station get unit test case by date and Kiosk Id', async () => {
 });
 
 describe('API tests for all routes', async () => {
-    //routing to https://hassaan-indego-test.herokuapp.com/api/v1/indego-data-fetch-and-store-it-db'
-    it('POST request and should return successfull with 200 response on https://hassaan-indego-test.herokuapp.com/api/v1/indego-data-fetch-and-store-it-db', function (done) {
-        fetch('https://hassaan-indego-test.herokuapp.com/api/v1/indego-data-fetch-and-store-it-db', {
+    //routing to serverHostName/api/v1/indego-data-fetch-and-store-it-db'
+    it(`POST request and should return successfull with 200 response on ${serverHostName}/api/v1/indego-data-fetch-and-store-it-db`, function (done) {
+        fetch(`${serverHostName}/api/v1/indego-data-fetch-and-store-it-db`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWJiOWVhZjU3YmRiNjAwMTA5NjEzNjYiLCJpYXQiOjE2MTQ4ODA0MTl9.D3EVqPxWoL3BN6sAqRmMGhbJj1oPDzpYHESUqpSeBHo`
+                Authorization: `${authToken}`
             }
         })
             .then((res) => res.json())
@@ -179,8 +183,8 @@ describe('API tests for all routes', async () => {
                 // never called
             });
     });
-    it('POST request and should return Unauthorized with 401 response on https://hassaan-indego-test.herokuapp.com/api/v1/stations?at=2021-03-10T10:01:03.865Z', function (done) {
-        fetch('https://hassaan-indego-test.herokuapp.com/api/v1/indego-data-fetch-and-store-it-db', {
+    it(`POST request and should return Unauthorized with 401 response on ${serverHostName}/api/v1/stations?at=2021-03-11T12:52:04.859Z`, function (done) {
+        fetch(`${serverHostName}/api/v1/indego-data-fetch-and-store-it-db`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -191,18 +195,18 @@ describe('API tests for all routes', async () => {
             .then(function (response) {
                 expect(response).to.be.not.equal(undefined);
                 expect(response).to.be.not.equal(null);
-                expect(response.status).to.be.equal(401);
+                expect(response.status).to.be.equal(400);
                 done();
             });
     });
 
-    //routing to https://hassaan-indego-test.herokuapp.com/api/v1/stations?at=2021-03-10T10:01:03.865Z'
-    it('GET request and should return successfull with 200 response on https://hassaan-indego-test.herokuapp.com/api/v1/stations?at=2021-03-10T10:01:03.865Z', function (done) {
-        fetch('https://hassaan-indego-test.herokuapp.com/api/v1/stations/2021-03-10T10:01:03.865Z', {
+    //routing to serverHostName/api/v1/stations?at=2021-03-10T10:01:03.865Z'
+    it(`GET request and should return successfull with 200 response on ${serverHostName}/api/v1/stations?at=2021-03-11T12:52:04.859Z`, function (done) {
+        fetch(`${serverHostName}/api/v1/stations/2021-03-11T12:52:04.859Z`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWJiOWVhZjU3YmRiNjAwMTA5NjEzNjYiLCJpYXQiOjE2MTQ4ODA0MTl9.D3EVqPxWoL3BN6sAqRmMGhbJj1oPDzpYHESUqpSeBHo`
+                Authorization: authToken
             }
         })
             .then((res) => res.json())
@@ -213,8 +217,8 @@ describe('API tests for all routes', async () => {
                 done();
             });
     });
-    it('GET request and should return Unauthorized with 401 response on https://hassaan-indego-test.herokuapp.com/api/v1/stations?at=2021-03-10T10:01:03.865Z', function (done) {
-        fetch('https://hassaan-indego-test.herokuapp.com/api/v1/stations/2021-03-10T10:01:03.865Z', {
+    it(`GET request and should return Unauthorized with 401 response on ${serverHostName}/api/v1/stations?at=2021-03-11T12:52:04.859Z`, function (done) {
+        fetch(`${serverHostName}/api/v1/stations/2021-03-11T12:52:04.859Z`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -225,18 +229,18 @@ describe('API tests for all routes', async () => {
             .then(function (response) {
                 expect(response).to.be.not.equal(undefined);
                 expect(response).to.be.not.equal(null);
-                expect(response.status).to.be.equal(401);
+                expect(response.status).to.be.equal(400);
                 done();
             });
     });
 
-    //routing to https://hassaan-indego-test.herokuapp.com/api/v1/stations/KIOSKID_GOES_HERE?at=2021-03-10T10:01:03.865Z'
-    it('GET request and should return successfull with 200 response on https://hassaan-indego-test.herokuapp.com/api/v1/stations/KIOSKID_GOES_HERE?at=2021-03-10T10:01:03.865Z', function (done) {
-        fetch('https://hassaan-indego-test.herokuapp.com/api/v1/stations/3004/2021-03-10T10:01:03.865Z', {
+    //routing to serverHostName/api/v1/stations/KIOSKID_GOES_HERE?at=2021-03-10T10:01:03.865Z'
+    it(`GET request and should return successfull with 200 response on ${serverHostName}/api/v1/stations/KIOSKID_GOES_HERE?at=2021-03-11T12:52:04.859Z`, function (done) {
+        fetch(`${serverHostName}/api/v1/stations/3005/2021-03-11T12:52:04.859Z`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWJiOWVhZjU3YmRiNjAwMTA5NjEzNjYiLCJpYXQiOjE2MTQ4ODA0MTl9.D3EVqPxWoL3BN6sAqRmMGhbJj1oPDzpYHESUqpSeBHo`
+                Authorization: `${authToken}`
             }
         })
             .then((res) => res.json())
@@ -247,8 +251,8 @@ describe('API tests for all routes', async () => {
                 done();
             });
     });
-    it('GET request and should return Unauthorized with 401 response on https://hassaan-indego-test.herokuapp.com/api/v1/stations?at=2021-03-10T10:01:03.865Z', function (done) {
-        fetch('https://hassaan-indego-test.herokuapp.com/api/v1/stations/3004/2021-03-10T10:01:03.865Z', {
+    it(`GET request and should return Unauthorized with 401 response on ${serverHostName}/api/v1/stations?at=2021-03-11T12:52:04.859Z`, function (done) {
+        fetch(`${serverHostName}/api/v1/stations/3005/2021-03-11T12:52:04.859Z`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -259,7 +263,7 @@ describe('API tests for all routes', async () => {
             .then(function (response) {
                 expect(response).to.be.not.equal(undefined);
                 expect(response).to.be.not.equal(null);
-                expect(response.status).to.be.equal(401);
+                expect(response.status).to.be.equal(400);
                 done();
             });
     });

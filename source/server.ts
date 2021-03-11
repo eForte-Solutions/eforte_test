@@ -18,7 +18,7 @@ const NAMESPACE = 'Server';
 const app = express();
 
 
-const DB_URL:string = `${process.env.MONGO_STRING || "mongodb+srv://iambuoyant:Gstc3hFmghzriTe@cluster0.1td2n.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"}`;
+const DB_URL:string = `${process.env.MONGO_STRING}`;
 /** Connect to Mongo */
 mongoose
     .connect(DB_URL, config.mongo.options)
